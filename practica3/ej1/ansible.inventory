@@ -1,0 +1,10 @@
+# Web application server
+[web]
+acr2324-web
+# Database server
+[db]
+acr2324-db
+# Group 'servers' with web and db
+[servers:children]
+web
+db

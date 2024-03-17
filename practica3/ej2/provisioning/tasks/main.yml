@@ -1,0 +1,39 @@
+# Complete task definition
+- name: Install apache server
+  package:
+    name: apache2
+    state: present
+
+- name: Enable rewrite Apache module
+  apache2_module:
+    name: rewrite
+    state: present
+  notify: restart-apache
+
+- name: Disable Apache default site
+  file:
+    path: /etc/apache2/sites-enabled/{{ default_site }}
+    state: absent 
+  notify: restart-apache
+
+- name: Create document root
+  file:
+    path: /var/www/{{ http_host }}
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy index.html template page
+  template:
+    src: templates/index.html.j2
+    dest: /var/www/{{ http_host }}/index.html
+  notify: restart-apache
+
+
+- name: Setup Apache virtual host
+  template:
+    src: templates/apache.conf.j2
+    dest: /etc/apache2/sites-enabled/{{ http_conf }}
+  notify: restart-apache
+

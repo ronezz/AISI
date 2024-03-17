@@ -1,0 +1,5 @@
+webapp_container: acr2324-web
+db_container: acr2324-db
+webapp_img: acr2324-web
+db_img: acr2324-db
+network: acr2324-network

@@ -1,0 +1,16 @@
+# Add roles definition
+
+- src: geerlingguy.apache
+  version: 4.0.0
+
+- src: geerlingguy.mysql
+  version: 4.3.4
+
+- src: geerlingguy.php
+  version: 5.0.1
+
+- src: geerlingguy.php-mysql
+  version: 2.1.0
+
+- src: geerlingguy.firewall
+  version: 2.5.1

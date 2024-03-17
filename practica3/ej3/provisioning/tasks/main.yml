@@ -1,0 +1,43 @@
+# Complete task definition
+- name: Install Docker SDK for Python
+  package:
+    name: python3-docker
+    state: present
+
+  # Add necessary lines here
+
+- name: Build Docker images from Dockerfiles
+  community.docker.docker_image:
+    name: "{{ item.name }}"
+    source: build
+    build:
+      path: "../provisioning/dockerfiles/{{ item.directory }}"
+      pull: false
+    state: present
+    force_source: yes
+  loop:
+    - { name: "{{ webapp_img }}", directory: webapp }
+    - { name: "{{ db_img }}", directory: db }
+
+- name: Create network
+  community.docker.docker_network:
+    name: "{{ network }}"
+    driver: bridge
+
+- name: Run MySQL container
+  community.docker.docker_container:
+    name: "{{ db_container }}"
+    image: "{{ db_img }}"
+    networks:
+      - name: "{{ network }}"
+    networks_cli_compatible: true   
+
+- name: Run Flask container
+  community.docker.docker_container:
+    name: "{{ webapp_container }}"
+    image: "{{ webapp_img }}"
+    networks:
+      - name: "{{ network }}"
+    networks_cli_compatible: true 
+    ports:
+      - "80:5000"  
